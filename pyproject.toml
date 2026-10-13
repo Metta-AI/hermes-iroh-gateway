@@ -1,0 +1,28 @@
+[project]
+name = "hermes-iroh-gateway"
+version = "0.1.0"
+description = "Hermes plugin that manages an iroh content-addressed HTTP gateway"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+  # Prebuilt native bindings (uniffi-rs over the Rust iroh core) — see
+  # https://docs.iroh.computer/languages/python. Prebuilt wheels exist for:
+  #   macOS (arm64, x86_64), Linux x86_64/aarch64 (glibc only), Windows x86_64.
+  # No wheel on musl/non-glibc Linux -> pip falls back to an sdist build,
+  # which needs the rustc/cargo/pkg-config/openssl from flake.nix's devShell.
+  "iroh>=0.35,<1.0",
+  "fastapi>=0.110",
+  "uvicorn>=0.27",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.optional-dependencies]
+test = ["httpx2"]
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+include = ["*.py", "dashboard/*.py"]

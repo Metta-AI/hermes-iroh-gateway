@@ -1,0 +1,14 @@
+## Dev/build artifacts — not committed, flake.nix recreates the environment
+.venv/
+node_modules/
+target/
+.direnv/
+.caos-data/
+__pycache__/
+*.pyc
+result
+result-*
+
+## Runtime data the plugin writes at $HERMES_HOME/plugins/hermes-iroh-gateway/data —
+## never lives in the repo; listed here only in case HERMES_HOME ever points here.
+/data/
