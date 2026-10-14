@@ -17,9 +17,10 @@ provides_tools:
   - iroh_gateway_stop
   - iroh_gateway_put
 
-# Declaration-only (surfaced by `hermes plugins doctor`, never auto-installed).
+# Declaration-only (surfaced by `hermes plugins doctor`, never auto-installed
+# on a Nix-managed Hermes — see README "Known gap"/sandbox section).
 # Prefer pyproject.toml as the source of truth; kept here too per the v2 schema
 # so `hermes plugins install`/`doctor` can surface it without parsing TOML.
 python_dependencies:
   - "iroh>=0.35,<1.0"
-  - "fastapi>=0.110"
+  - "fastapi>=0.110,<1.0"
