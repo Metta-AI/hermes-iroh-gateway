@@ -62,24 +62,25 @@ let
     version = "0.35.0";
     format = "wheel";
     src = pkgs.fetchurl irohWheels.${pkgs.stdenv.hostPlatform.system};
-    dontBuild = true;
-    pyproject = false;
+    # The wheel bundles a native library needing glibc/libgcc patched in on NixOS.
+    nativeBuildInputs = lib.optionals pkgs.stdenv.isLinux [ pkgs.autoPatchelfHook ];
+    buildInputs = lib.optionals pkgs.stdenv.isLinux [ pkgs.stdenv.cc.cc.lib ];
+    doCheck = false;
   };
 in
 {
   services.hermes-agent.extraPythonPackages = [
-    irohWheel
-    py.fastapi
-    py.uvicorn
+    irohWheel # fastapi/uvicorn already ship with hermes-agent
   ];
 
   # Directory plugin: symlinked into $HERMES_HOME/plugins/ at activation.
   # `self` is this flake's own source tree — works for GitHub, a tag, or a
   # local `path:` override, with no hardcoded absolute path.
   services.hermes-agent.extraPlugins = [
-    (pkgs.runCommand "hermes-iroh-gateway-plugin" { } ''
+    # The derivation name matters: Hermes links it as plugins/nix-managed-<name>.
+    (pkgs.runCommand "hermes-iroh-gateway" { } ''
       mkdir -p $out
-      cp -r ${self}/* $out/
+      cp -r ${self}/. $out/
     '')
   ];
 

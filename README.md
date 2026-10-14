@@ -103,9 +103,11 @@ This repo's flake exposes a ready-to-import home-manager module:
 
 ```nix
 # in your nixos-config / home-manager flake:
-inputs.hermes-iroh-gateway.url = "github:<owner>/hermes-iroh-gateway"; # not pushed yet — see Status
+inputs.hermes-iroh-gateway = { url = "github:Metta-AI/hermes-iroh-gateway"; flake = false; };
 # ...
-imports = [ inputs.hermes-iroh-gateway.homeManagerModules.default ];
+imports = [ (import "${inputs.hermes-iroh-gateway}/nix/home-manager-module.nix" { self = inputs.hermes-iroh-gateway; }) ];
+# NB: the module sets settings.plugins.enabled, but lists do not merge across
+# definitions: if you set plugins.enabled yourself, include "hermes-iroh-gateway".
 ```
 
 It wires up `services.hermes-agent.extraPlugins` (symlinks this repo into

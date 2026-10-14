@@ -59,7 +59,8 @@ def _hermes_home() -> Path:
 
 
 def _plugin_data_dir() -> Path:
-    d = _hermes_home() / "plugins" / "hermes-iroh-gateway" / "data"
+    # Not under plugins/: on Nix that dir holds read-only store symlinks.
+    d = _hermes_home() / "iroh-gateway"
     d.mkdir(parents=True, exist_ok=True)
     return d
 
