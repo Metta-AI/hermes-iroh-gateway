@@ -47,5 +47,13 @@
             echo "    uv run uvicorn --help                      # (gateway runs inside Hermes's own process normally)"
           '';
         };
-      });
+      })
+    // {
+      # Non-per-system output: a home-manager module consumers import
+      # directly — `inputs.hermes-iroh-gateway.homeManagerModules.default`.
+      # Takes `self` so `extraPlugins` can reference this flake's own source
+      # regardless of how the consumer's flake fetched it (GitHub, a local
+      # `path:` override for dev, a git tag pin, ...) — no hardcoded path.
+      homeManagerModules.default = import ./nix/home-manager-module.nix { inherit self; };
+    };
 }
